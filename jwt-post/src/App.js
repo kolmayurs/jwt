@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Register from './Register';
 class App extends Component {
   componentDidMount(){
 let url = 'http://localhost:4000/users';
-let jwtStr = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Ik1heXVyIiwiZW1haWwiOiJtYXl1ckBtYXl1cmtvbGkuY29tIn0sImlhdCI6MTUyNzA3Nzc5OX0.3cMR2AETEu3SVpTiwECdnRB0schxwSVaYwY9uT3Bm-Q'
+let jwtStr = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6Ik1heXVyIiwiZW1haWwiOiJtYXl1ckBtYXl1cmtvbGkuY29tIn0sImlhdCI6MTUyNzA3Nzc5OX0.3cMR2AETEu3SVpTiwECdnRB0schxwSVaYwY9uT3Bm-Q'
 axios.get(url, {
 'headers': {
   'auth': 'Bearer '+ jwtStr,
@@ -18,7 +19,7 @@ axios.get(url, {
   render() {
     return (
       <div className="App">
-        <h1>Hello World</h1>
+        <Register />
       </div>
     );
   }

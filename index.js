@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -43,6 +44,27 @@ app.get('/users', verifyToken, (req, res) => {
 	
 })
 
+app.get('/users/add', (req,res) =>{
+	MongoClient.connect(url,{ useNewUrlParser: true }, function(err, db) {
+  if(err){
+			return res.send(err);
+		}
+var user = { username: req.headers.username, email: req.headers.email, password: req.headers.password };
+var hash = bcrypt.hashSync(req.headers.password, 10);
+var token = jwt.sign(user, 'key');
+  var dbo = db.db("myDB");
+			  	var myobj = { username: req.headers.username, email: req.headers.email, password: hash, token: token };
+				  dbo.collection("Users").insertOne(myobj, function(err, result) {
+				    if(err){
+							return res.send(err);
+						}
+				    console.log("1 document inserted");
+				    res.send('1 document inserted');
+				    db.close();
+				  });
+});
+});
+
 app.get('/login', (req,res) => {
 	const user = {
 		id:1,
@@ -60,7 +82,7 @@ function verifyToken(req, res, next){
 	const bearerHeadr = req.headers.auth;
 	if(typeof bearerHeadr !== 'undefined'){
 		const bearer = bearerHeadr.split(' ');
-		const bearerToken = bearer[1];
+		const bearerToken = bearer[2];
 		req.token = bearerToken;
 		next();
 	}
